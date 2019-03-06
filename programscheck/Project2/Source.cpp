@@ -7,22 +7,35 @@ double divi(double, double);
 double addicalc(double, double);
 double subcalc(double, double);
 double mul(double, double);
+#include <string>
+#include <stack>
+#include <iostream>
+using namespace std;
+int precedence(char op) {
+	if (op == '+' || op == '-')
+		return 1;
+	if (op == '*' || op == '/')
+		return 2;
+	if (op == '^')
+		return 3;
+	return 0;
+}
 bool areParanthesisBalanced(string expr)
 {
 	stack<char> s;
 	char x;
 
-	
+
 	for (int i = 0; i < expr.length(); i++)
 	{
 		if (expr[i] == '(' || expr[i] == '[' || expr[i] == '{')
 		{
-			
+
 			s.push(expr[i]);
 			continue;
 		}
 
-		
+
 		if (s.empty())
 			return true;
 
@@ -30,7 +43,7 @@ bool areParanthesisBalanced(string expr)
 		{
 		case ')':
 
-			
+
 			x = s.top();
 			s.pop();
 			if (x == '{' || x == '[')
@@ -39,7 +52,7 @@ bool areParanthesisBalanced(string expr)
 
 		case '}':
 
-			
+
 			x = s.top();
 			s.pop();
 			if (x == '(' || x == '[')
@@ -48,7 +61,7 @@ bool areParanthesisBalanced(string expr)
 
 		case ']':
 
-			
+
 			x = s.top();
 			s.pop();
 			if (x == '(' || x == '{')
@@ -57,127 +70,119 @@ bool areParanthesisBalanced(string expr)
 		}
 	}
 
-	
+
 	return (s.empty());
 }
-int postfixeval(string s) {
-	stack<double> st;
-	st.push(0);
-	//string s;
-	//cin >> s;
-	double c1, c2;
-	int i = 0;
-
-	for (i = 0; s[i] != '\0'; i++) {
-		if (isdigit(s[i])) {
-			double a = (double)s[i];
-			//cout<<a-48;
-			st.push(a - 48);
-		}
-		else {
-			if (s[i] == '*') {
-				c1 = st.top();
-				st.pop();
-				c2 = st.top();
-				st.pop();
-				double s = mul(c1,c2);
-				st.push(s);
-			}
-			if (s[i] == '/') {
-				c1 = st.top();
-				st.pop();
-				c2 = st.top();
-				st.pop();
-				double s = divi(c1,c2);
-				st.push(s);
-			}
-			if (s[i] == '+') {
-				c1 = st.top();
-				st.pop();
-				c2 = st.top();
-				st.pop();
-				double s = addicalc(c1,c2);
-				st.push(s);
-			}
-			if (s[i] == '-') {
-				c1 = st.top();
-				st.pop();
-				c2 = st.top();
-				st.pop();
-				double s = subcalc(c2,c1);
-				st.push(s);
-			}
-		}
+double Operation(double a, double b, char op) {
+	switch (op) {
+	case '+': return addicalc(a,b);
+	case '-': return subcalc(a, b);
+	case '*': return mul(a,b);
+	case '/': return divi(a,b);
+	case '^': return pow(a, b);
 
 	}
-	cout << st.top();
-	return 0;
 }
-int prec(char c)
-{
-	if (c == '*' || c == '/')
-		return 2;
-	else if (c == '+' || c == '-')
-		return 1;
-	else
-		return -1;
-}
-int main() {
-	stack<char> st;
-	st.push('N');
 
-	string s, ns,ns1;
+double evaluate(string str) {
+	int i;
+	stack <double> values;
+
+	stack <char> ops;
+
+	for (i = 0; i < str.length(); i++) {
+
+		if (str[i] == ' ')
+			continue;
+
+		else if (str[i] == '(') {
+			ops.push(str[i]);
+		}
+
+		else if (isdigit(str[i])) {
+			double val = 0;
+
+			while (i < str.length() && isdigit(str[i]))
+			{
+				val = (val * 10) + (str[i] - '0');
+				i++;
+			}
+			i--;
+			values.push(val);
+		}
+
+
+		else if (str[i] == ')')
+		{
+			while (!ops.empty() && ops.top() != '(')
+			{
+				double val2 = values.top();
+				values.pop();
+
+				double val1 = values.top();
+				values.pop();
+
+				char op = ops.top();
+				ops.pop();
+
+				values.push(Operation(val1, val2, op));
+			}
+
+
+			ops.pop();
+		}
+
+
+		else
+		{
+			while (!ops.empty() && precedence(ops.top())
+				>= precedence(str[i])) {
+				double val2 = values.top();
+				values.pop();
+
+				double val1 = values.top();
+				values.pop();
+
+				char op = ops.top();
+				ops.pop();
+
+				values.push(Operation(val1, val2, op));
+			}
+
+
+			ops.push(str[i]);
+		}
+	}
+
+
+	while (!ops.empty()) {
+		double val2 = values.top();
+		values.pop();
+
+		double val1 = values.top();
+		values.pop();
+
+		char op = ops.top();
+		ops.pop();
+
+		values.push(Operation(val1, val2, op));
+	}
+
+	return values.top();
+}
+
+int main() {
+	string s;
 	cin >> s;
-	if (areParanthesisBalanced(s)) {
-		cout << "Balanced"<<endl;
+	if(areParanthesisBalanced(s)) {
+		
 	}
 	else {
-		cout << "Not Balanced"<<endl;
-		system("pause");
-		return 0;
+	cout << "invalid" << endl;
+	system("pause");
+	return 0;
 	}
-	int l = s.length();
-	char c;
-
-	for (int i = 0; i < l; i++) {
-		if (isdigit(s[i])) {
-			ns += s[i];
-		}
-		else if (s[i] == '(') {
-			st.push(s[i]);
-		}
-		else if (s[i] == ')') {
-			while (st.top() != 'N'&&st.top() != '(') {
-				c = st.top();
-				st.pop();
-				ns += c;
-			}
-			if (st.top() == '(') {
-				c = st.top();
-				st.top();
-			}
-		}
-		else {
-			while (st.top() != 'N'&&prec(s[i]) <= prec(st.top())) {
-				c = st.top();
-				st.pop();
-				ns += c;
-			}
-			st.push(s[i]);
-		}
-	}
-	while (st.top() != 'N') {
-		c = st.top();
-		st.pop();
-		ns += c;
-	}
-	for (int i = 0; i < l; i++) {
-		if (ns[i] == '(') {
-			continue;
-		}
-		ns1 += ns[i];
-	}
-	postfixeval(ns1);
+	cout << evaluate(s);
 	system("pause");
 	return 0;
 }
