@@ -87,12 +87,12 @@ double Operation(double a, double b, char op) { //returns result of a operation
 }
 
 double evaluate(string str) {
-	int i;
+	int i=0;
 	stack <double> numbers; //stack to store numbers of float or int
 
 	stack <char> ops; //stack to store operations
 
-	for (i = 0; i < str.length(); i++) {
+	while( i<str.length()) {
 
 		if (str[i] == ' ') //delimiter is white space
 			continue;
@@ -107,7 +107,11 @@ double evaluate(string str) {
 
 			while (i < str.length() && isdigit(str[i]))
 			{
-				val = (val * 10) + (str[i] - '0');
+				int x;
+				x =  (int)str[i];
+				x = x - 48;
+
+				val = (val * 10) + x;// (str[i] - '0');
 				i++;
 			}
 			i--;
@@ -157,6 +161,7 @@ double evaluate(string str) {
 
 			ops.push(str[i]);
 		}
+		i++;
 	}
 	// Entire expression has been parsed at this 
 	// point, apply remaining operations to remaining 
@@ -177,6 +182,7 @@ double evaluate(string str) {
 
 	return numbers.top();
 }
+
 
 int main() {
 	string s;
