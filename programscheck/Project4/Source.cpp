@@ -84,7 +84,7 @@ int main()
 	char *str2;
 	str2 = (char*)malloc(100 * sizeof(char));
 
-	printf("Enter an operation to be performed.\n1.stringCopy()\n2.stringCat()\n3.strRev()\n4.stringCmp()\n5.stringLen()");
+	printf("Enter an operation to be performed.\n1.stringCopy()\n2.stringCat()\n3.strRev()\n4.stringCmp()\n5.stringLen() and enter a number greater than 5 to break out of loop");
 	cout << endl;
 	scanf_s("%d", &option);
 	
