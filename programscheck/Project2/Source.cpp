@@ -125,17 +125,12 @@ double evaluate(string str) {
 			{
 				double v2 = numbers.top();
 				numbers.pop();
-
 				double v1 = numbers.top();
 				numbers.pop();
-
 				char op = ops.top();
 				ops.pop();
-
 				numbers.push(Operation(v1, v2, op));
 			}
-
-
 			ops.pop();
 		}
 		// While top of 'ops' has same or greater  
@@ -151,7 +146,6 @@ double evaluate(string str) {
 				numbers.pop();
 				double v1 = numbers.top();
 				numbers.pop();
-
 				char op = ops.top();
 				ops.pop();
 
