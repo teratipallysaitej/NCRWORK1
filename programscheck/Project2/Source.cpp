@@ -11,7 +11,7 @@ double mul(double, double);
 #include <stack>
 #include <iostream>
 using namespace std;
-int precedence(char op) {
+int precedence(char op) { //return precedence of a function
 	if (op == '+' || op == '-')
 		return 1;
 	if (op == '*' || op == '/')
@@ -20,7 +20,7 @@ int precedence(char op) {
 		return 3;
 	return 0;
 }
-bool areParanthesisBalanced(string expr)
+bool areParanthesisBalanced(string expr) //checks brakets validation for a code
 {
 	stack<char> s;
 	char x;
@@ -73,7 +73,7 @@ bool areParanthesisBalanced(string expr)
 
 	return (s.empty());
 }
-double Operation(double a, double b, char op) {
+double Operation(double a, double b, char op) { //returns result of a operation
 	switch (op) {
 	case '+': return addicalc(a,b);
 	case '-': return subcalc(a, b);
@@ -86,20 +86,20 @@ double Operation(double a, double b, char op) {
 
 double evaluate(string str) {
 	int i;
-	stack <double> values;
+	stack <double> values; //stack to store values of float or int
 
-	stack <char> ops;
+	stack <char> ops; //stack to store operations
 
 	for (i = 0; i < str.length(); i++) {
 
-		if (str[i] == ' ')
+		if (str[i] == ' ') //delimiter is white space
 			continue;
 
 		else if (str[i] == '(') {
 			ops.push(str[i]);
 		}
 
-		else if (isdigit(str[i])) {
+		else if (isdigit(str[i])) { //it runs until it encounters white space or operator
 			double val = 0;
 
 			while (i < str.length() && isdigit(str[i]))
@@ -112,7 +112,7 @@ double evaluate(string str) {
 		}
 
 
-		else if (str[i] == ')')
+		else if (str[i] == ')')//it pops and adds all values until ')' is obtained
 		{
 			while (!ops.empty() && ops.top() != '(')
 			{
@@ -131,7 +131,10 @@ double evaluate(string str) {
 
 			ops.pop();
 		}
-
+		// While top of 'ops' has same or greater  
+			// precedence to current token, which 
+			// is an operator. Apply operator on top  
+			// of 'ops' to top two elements in values stack.
 
 		else
 		{
@@ -153,7 +156,9 @@ double evaluate(string str) {
 			ops.push(str[i]);
 		}
 	}
-
+	// Entire expression has been parsed at this 
+	// point, apply remaining ops to remaining 
+	// values.
 
 	while (!ops.empty()) {
 		double val2 = values.top();
