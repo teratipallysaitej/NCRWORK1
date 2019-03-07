@@ -34,7 +34,9 @@ bool areParanthesisBalanced(string expr) //checks brakets validation for a code
 			s.push(expr[i]);
 			continue;
 		}
-
+		// IF current current character is not opening 
+		// bracket, then it must be closing. So stack 
+		// cannot be empty at this point. 
 
 		if (s.empty())
 			return true;
@@ -86,7 +88,7 @@ double Operation(double a, double b, char op) { //returns result of a operation
 
 double evaluate(string str) {
 	int i;
-	stack <double> values; //stack to store values of float or int
+	stack <double> numbers; //stack to store numbers of float or int
 
 	stack <char> ops; //stack to store operations
 
@@ -101,6 +103,7 @@ double evaluate(string str) {
 
 		else if (isdigit(str[i])) { //it runs until it encounters white space or operator
 			double val = 0;
+			
 
 			while (i < str.length() && isdigit(str[i]))
 			{
@@ -108,24 +111,24 @@ double evaluate(string str) {
 				i++;
 			}
 			i--;
-			values.push(val);
+			numbers.push(val);
 		}
 
 
-		else if (str[i] == ')')//it pops and adds all values until ')' is obtained
+		else if (str[i] == ')')//it pops and adds all numbers until ')' is obtained
 		{
 			while (!ops.empty() && ops.top() != '(')
 			{
-				double val2 = values.top();
-				values.pop();
+				double v2 = numbers.top();
+				numbers.pop();
 
-				double val1 = values.top();
-				values.pop();
+				double v1 = numbers.top();
+				numbers.pop();
 
 				char op = ops.top();
 				ops.pop();
 
-				values.push(Operation(val1, val2, op));
+				numbers.push(Operation(v1, v2, op));
 			}
 
 
@@ -134,22 +137,21 @@ double evaluate(string str) {
 		// While top of 'ops' has same or greater  
 			// precedence to current token, which 
 			// is an operator. Apply operator on top  
-			// of 'ops' to top two elements in values stack.
+			// of 'ops' to top two elements in numbers stack.
 
 		else
 		{
 			while (!ops.empty() && precedence(ops.top())
 				>= precedence(str[i])) {
-				double val2 = values.top();
-				values.pop();
-
-				double val1 = values.top();
-				values.pop();
+				double v2 = numbers.top();
+				numbers.pop();
+				double v1 = numbers.top();
+				numbers.pop();
 
 				char op = ops.top();
 				ops.pop();
 
-				values.push(Operation(val1, val2, op));
+				numbers.push(Operation(v1, v2, op));
 			}
 
 
@@ -157,23 +159,23 @@ double evaluate(string str) {
 		}
 	}
 	// Entire expression has been parsed at this 
-	// point, apply remaining ops to remaining 
-	// values.
+	// point, apply remaining operations to remaining 
+	// numbers.
 
 	while (!ops.empty()) {
-		double val2 = values.top();
-		values.pop();
+		double v2 = numbers.top();
+		numbers.pop();
 
-		double val1 = values.top();
-		values.pop();
+		double v1 = numbers.top();
+		numbers.pop();
 
 		char op = ops.top();
 		ops.pop();
 
-		values.push(Operation(val1, val2, op));
+		numbers.push(Operation(v1, v2, op));
 	}
 
-	return values.top();
+	return numbers.top();
 }
 
 int main() {
