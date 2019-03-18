@@ -41,25 +41,20 @@ char* stringCopy(char* source, char* destination) {
 }
 
 
-int stringCmp(char * str1,  char* str2)
-
+int stringCmp(char * destination, const char* source)
 {
-	int i = 0, j = 0;
-	while ((*str1 != '\0' && *str2 != '\0') && *str1 == *str2)
+	while (*destination == *source)
 	{
-		str1++;
-		str2++;
+		if (*destination == '\0' || source == '\0')
+			break;
+		destination++;
+		source++;
 	}
 
-	if (*str1 == *str2)
-	{
-		return 1; // strings are identical
-	}
-
+	if (*destination == '\0' || source == '\0')
+		return 1;
 	else
-	{
 		return 0;
-	}
 }
 
 char* stringRev(char *s)
@@ -83,6 +78,7 @@ int main()
 	str1 = (char*)malloc(100 * sizeof(char));
 	char *str2;
 	str2 = (char*)malloc(100 * sizeof(char));
+	
 
 	printf("Enter an operation to be performed.\n1.stringCopy()\n2.stringCat()\n3.strRev()\n4.stringCmp()\n5.stringLen() and enter a number greater than 5 to break out of loop");
 	cout << endl;
@@ -93,8 +89,10 @@ int main()
 		switch (option)
 		{
 		case 1:
-		{   cout << "enter source and destination strings" << endl;
-		cin >> str1 >> str2;
+			getchar();
+		{   cout << "enter source strings" << endl;
+		//scanf_s("%[^\n]s", str1, 50);
+		scanf_s("%[^\n]s", str2, 50);
 			stringCopy( str2,str1);
 			
 			printf("Copied string is :%s\n", str1);
@@ -102,26 +100,32 @@ int main()
 		}
 
 		case 2:
+			getchar();
 		{   cout << "enter strings:" << endl;
-		cin >> str1;
-		cin >> str2;
+		gets_s(str1, 99);
+		gets_s(str2, 99);
 			stringCat(str1, str2);
 			printf("Concatenated String is: %s\n", str1);
 			break;
 		}
 
 		case 3:
-		{    
+		{    getchar();
 			cout << "enter string to be reversed:";
-			cin >> str1;
+			scanf_s("%[^\n]s", str1,30);
 			printf("Reversed string is %s", stringRev(str1));
+
 			break;
 
 		}
 
 		case 4:
+			getchar();
 		{   cout << "enter strings:";
-		cin >> str1 >> str2;
+		gets_s(str1, 99);
+		getchar();
+		//scanf_s("%[^\n]s", str2, 50);
+		gets_s(str2, 99);
 		res = strcmp(str1, str2);
 			if (res == 1)
 				printf("Strings are equal\n");
@@ -131,8 +135,10 @@ int main()
 		}
 
 		case 5:
+			getchar();
 		{  cout << "enter strin:";
-		cin >> str1;
+		scanf_s("%[^\n]s", str1, 50);
+		
 			printf("length of first string is %d\n", stringLen(str1));
 			
 			break;
@@ -144,6 +150,7 @@ int main()
 		printf("\nChoose another operation to be performed :");
 		scanf_s("%d", &option);
 	}
+	system("pause");
 	free(str1);
 	free(str2);
 	return 0;

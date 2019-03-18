@@ -20,7 +20,7 @@ int precedence(char op) { //return precedence of a function
 		return 3;
 	return 0;
 }
-bool areParanthesisBalanced(string expr) //checks brakets validation for a code
+bool Balanced(string expr) //checks brakets validation for a code
 {
 	stack<char> s;
 	char x;
@@ -181,7 +181,7 @@ double evaluate(string str) {
 int main() {
 	string s;
 	cin >> s;
-	if(areParanthesisBalanced(s)) {
+	if(Balanced(s)) {
 		
 	}
 	else {
